@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Quotes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 text-left">
+            <h1>{{first_name}} {{last_name}}'s Quotes</h1>
+        </div>
+    </div>
+
+    <div class="col-sm-6 text-right">
+        <a href="/quotes">Back</a>|
+        <a href="/logout">Log out</a>
+    </div>
+</div>
+
+
+
+<div class="container">
+    {% for quote in quotes %}
+<div>
+    {{quote.author}} : "{{quote.quote}}"
+</div>
+{% endfor %}
+</div>
+
+
+</body>
+</html>

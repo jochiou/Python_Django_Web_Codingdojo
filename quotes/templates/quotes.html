@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quote Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 text-left">
+            <h1>Welcome {{first_name}} {{last_name}}</h1>
+        </div>
+    </div>
+
+    <div class="col-sm-6 text-right">
+        <a href="/myaccount/{{request.session.logged_in_user}}">Edit My Account</a>|
+        <a href="/logout">Log out</a>
+    </div>
+
+
+    <div class="">
+
+        <div class="col-sm-6 text-left">
+            <h3>Quotes:</h3>
+        </div>
+
+        {% for quote in quotes %}
+        <div class="">
+            <div> {{quote.author}} : "{{quote.quote}}"</div>
+            <div> Posted By
+                <a href="user/{{quote.user.userId}}">{{quote.user.first_name}} {{quote.user.last_name}}</a>
+            </div>
+
+            <div>
+                {% with count=quote.like.all.count %}
+                {{ count }} people like this
+                {% endwith %}
+                <form method="post" action="likeOneQuote/{{quote.quoteId}}">
+                    {% csrf_token %}
+                    <button>Like</button>
+                </form>
+            </div>
+
+            <div>
+                {% if request.session.logged_in_user == quote.user.userId %}
+                <a href="deleteQuote/{{quote.quoteId}}">Delete</a>
+                {% endif %}
+            </div>
+
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <form method="post" action="addQuote/{{request.session.logged_in_user}}">
+                {% csrf_token %}
+                <div class="col-sm-6 text-left">
+                    <h3>Add a Quote:</h3>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4" for="add_quote_text_author">Author</label>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.extra_tags == "author_length" %}
+                    <span class="text-danger">{{message}}</span>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <input class="col-sm-8" type="text" id="add_quote_text_author" name="add_quote_text_author">
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4" for="add_quote_textarea_quote">Quote</label>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.extra_tags == "quote_length" %}
+                    <span class="text-danger">{{message}}</span>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <textarea class="col-sm-8" id="add_quote_textarea_quote" name="add_quote_textarea_quote"></textarea>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <input type="submit" class="" value="Submit">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

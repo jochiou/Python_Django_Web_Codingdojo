@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit account</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="col-sm-6 text-right">
+    <a href="/quotes">Back</a>|
+    <a href="/logout">Log out</a>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 text-left">
+            <h1>Edit My Account</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <form action="/myaccount/{{request.session.logged_in_user}}/edit" method="post">
+                {% csrf_token %}
+                <div class="form-group row">
+
+                    <label class="col-sm-4" for="edit_account_first_name">First Name</label>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.extra_tags == "required_fields"%}
+                    <span class="text-danger">{{message}}</span>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <input class="col-sm-8" type="text" id="edit_account_first_name" name="edit_account_first_name" value="{{first_name}}">
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4" for="edit_account_last_name">Last Name</label>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.extra_tags == "required_fields" %}
+                    <span class="text-danger">{{message}}</span>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <input class="col-sm-8" type="text" id="edit_account_last_name" name="edit_account_last_name" value="{{last_name}}">
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4" for="edit_account_email">Email</label>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.extra_tags == "required_fields" or message.extra_tags == "email" %}
+                    <span class="text-danger">{{message}}</span>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <input class="col-sm-8" type="text" id="edit_account_email" name="edit_account_email" value="{{email}}">
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-sm-3"></div>
+                    <input type="submit" class="col-sm-4 btn btn-primary" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
