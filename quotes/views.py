@@ -38,11 +38,11 @@ def showQuotesDashboardTemplate(request):
             return render(request, 'quotes.html', context)
         else:
             print("not logged in, redirect to home page")
-            return redirect("/")
+            return redirect("/belt_exam")
     except Exception as e:
         print(e)
         #print("cant find variable: logged_in_user in session, redirect to home page")
-        return redirect("/")
+        return redirect("/belt_exam")
 
 # form, add a quote to db (POST)
 def addQuoteByUserID(request, userID):
@@ -66,7 +66,7 @@ def addQuoteByUserID(request, userID):
         except Exception as e:
             print(e)
 
-    return redirect("/quotes")
+    return redirect("/belt_exam/quotes")
 
 def showSingleUserQuotesTemplate(request, userID):
 
@@ -83,7 +83,7 @@ def showSingleUserQuotesTemplate(request, userID):
 
     else:
         print("fail rediret to home")
-        return redirect('/')
+        return redirect('/belt_exam')
 
 
 def showUserAccountTemplate(request, userID):
@@ -107,16 +107,16 @@ def showUserAccountTemplate(request, userID):
             return render(request, 'edit_account_template.html', context)
         else:
             print("not logged in, redirect to home page")
-            return redirect("/")
+            return redirect("/belt_exam")
     except Exception as e:
         print(e)
         print("cant find variable: logged_in_user in session, redirect to home page")
-        return redirect("/")
+        return redirect("/belt_exam")
 
 def deleteQuoteByQuoteID(request, quoteID):
     quoteToDelete = Quote.objects.get(quoteId=quoteID)
     quoteToDelete.delete()
-    return redirect("/quotes")
+    return redirect("/belt_exam/quotes")
 
 
 def editUser(request, userID):
@@ -127,7 +127,7 @@ def editUser(request, userID):
         print("update input error, doesn't touch db")
         for key, value in errors.items():
             messages.error(request, value, extra_tags=key)
-        return redirect('/myaccount/{}'.format(request.session['logged_in_user']))
+        return redirect('/belt_exam/myaccount/{}'.format(request.session['logged_in_user']))
     else:
         try:
             user = User.objects.get(userId=userID)
@@ -140,7 +140,7 @@ def editUser(request, userID):
         except Exception as e:
             print(e)
             print("unexpected error happened during update (after input check)")
-        return redirect('/myaccount/{}'.format(request.session['logged_in_user']))
+        return redirect('/belt_exam/myaccount/{}'.format(request.session['logged_in_user']))
 
 def addLikeToQuote(request, quoteID):
     this_quote = Quote.objects.get(quoteId=quoteID)
@@ -150,7 +150,7 @@ def addLikeToQuote(request, quoteID):
     this_quote.like.add(this_user)
     print("the value of this quote's like: {}".format(this_quote.like.all().count()))
     this_quote.save()
-    return redirect("/quotes")
+    return redirect("/belt_exam/quotes")
 
 
 def login(request):
@@ -165,17 +165,17 @@ def login(request):
         print("errors dict:" + str(errors))
         for key, value in errors.items():
             messages.error(request, value, extra_tags=key)
-        return redirect("/")
+        return redirect("/belt_exam")
     else:
         userid = User.objects.filter(email=email)[0].userId
         print('login success')
         request.session['logged_in_user'] = userid
-        return redirect('/quotes')
+        return redirect('/belt_exam/quotes')
 
 
 def logout(request):
     request.session["logged_in_user"] = None
-    return redirect("/")
+    return redirect("/belt_exam")
 
 
 def register(request):
@@ -193,7 +193,7 @@ def register(request):
         print("errors dict:" + str(errors))
         for key, value in errors.items():
             messages.error(request, value, extra_tags=key)
-        return redirect("/")
+        return redirect("/belt_exam")
 
     else:
         salt = bcrypt.gensalt()
@@ -213,10 +213,10 @@ def register(request):
             userId = User.objects.filter(email=email)[0].userId
             request.session['logged_in_user'] = userId
 
-            return redirect("/quotes")
+            return redirect("/belt_exam/quotes")
 
         except Exception as e:
             print(e)
             request.session['error_msg'] = "something went wrong during account registration"
-            return redirect('/')
+            return redirect('/belt_exam')
 

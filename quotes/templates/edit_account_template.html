@@ -9,8 +9,8 @@
 <body>
 
 <div class="col-sm-6 text-right">
-    <a href="/quotes">Back</a>|
-    <a href="/logout">Log out</a>
+    <a href="/belt_exam/quotes">Back</a>|
+    <a href="/belt_exam/logout">Log out</a>
 </div>
 
 
@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <form action="/myaccount/{{request.session.logged_in_user}}/edit" method="post">
+            <form action="/belt_exam/myaccount/{{request.session.logged_in_user}}/edit" method="post">
                 {% csrf_token %}
                 <div class="form-group row">
 
